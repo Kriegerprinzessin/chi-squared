@@ -8,20 +8,28 @@ Background to test: Used when comparing differences in distributions of 2+ sampl
 __author__ = 'Kriegerprinzessin'
 __email__ = 'thesearemyrepos@gmail.com'
 
+# test data
+percs_obs_test = [76, 67, 83, 74, 68, 71, 73]
+percs_exp_test = [65, 54, 75, 60, 56, 68, 62]
+ns_obs_test = [98, 27, 78, 96, 96, 94, 96]
 
+## for one dichotomous item/question
+# percs_obs = % of category 1 of different (sub)groups/items OBSERVED (e. g. current distribution)
+# percs_exp = % of category 1 of different (sub)groups/items EXPECTED (e. g. last/typical distribution)
+# ns_obs = ns for (sub)groups/items OBSERVED
+def chi_homogenity(percs_obs, percs_exp, ns_obs):
+    # calculate observed values: [category 1] via percs_obs and ns_obs, [category 2] via ns_obs - category 1
+    values_found = [[],[]]
+    for idx, perc in enumerate(percs_obs):
+        values_found[0].append(float(perc/100*ns_obs[idx]))
+        values_found[1].append(float(ns_obs[idx]-values_found[0][idx]))
+    # calculate expected values: [category 1] via percs_exp and ns_obs, [category 2] via ns_obs - category 1
+    values_expected = [[],[]]
+    for idx, perc in enumerate(percs_exp):
+        values_expected[0].append(float(perc/100*ns_obs[idx]))
+        values_expected[1].append(float(ns_obs[idx]-values_expected[0][idx]))
 
-# for one dichotomous item/question, percs = % of different groups, ns = ns of different groups
-def chi_homogenity(percs, ns):
-	# calculate first column via % and n, second column via n - first	
-	column_values_found = [[],[]]
-	for idx, perc in enumerate(percs):
-		column_values_found[0].append(float(perc/100*ns[idx]))
-		column_values_found[1].append(float(ns[idx]-column_values_found[0][idx]))
-	# calculate expected cell values
-	column_values_expected = [[],[]]
-	for idx, value in enumerate(column_values_found[0]):
-		column_values_expected[0].append((column_values_found[0][idx]+column_values_found[1][idx])*sum(column_values_found[0])/(sum(column_values_found[0])+sum(column_values_found[1])))
-	for idx, value in enumerate(column_values_found[1]):
-		column_values_expected[1].append((column_values_found[0][idx]+column_values_found[1][idx])*sum(column_values_found[1])/(sum(column_values_found[0])+sum(column_values_found[1])))
-	print(column_values_found)
-	print(column_values_expected)
+    print(values_found)
+    print(values_expected)
+
+chi_homogenity(percs_obs_test, percs_exp_test, ns_obs_test)
