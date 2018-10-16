@@ -5,6 +5,8 @@ The result given is either 'not significant' or significant at a certain alpha l
 Background to test: Used when comparing differences in distributions of 2+ samples with data on any scale of measure.
 """
 
+import math
+
 __author__ = 'Kriegerprinzessin'
 __email__ = 'thesearemyrepos@gmail.com'
 
@@ -20,7 +22,7 @@ ns_S2_test = [150, 48, 126, 146, 149, 142, 149]
 # ns_S2 = ns for items/variables for sample 2
 def chi_homogenity(percs_S1, percs_S2, ns_S1, ns_S2):
 
-    #
+    # calculate all observed and expected cell values
     values_chi_calc = []
     for idx, perc in enumerate(percs_S1):
         values_chi_calc.append([]) # creates item sublist
@@ -37,7 +39,21 @@ def chi_homogenity(percs_S1, percs_S2, ns_S1, ns_S2):
 
     print(values_chi_calc)
 
+    # calculate degrees of freedom and test statistic
+    dfs = (2-1)*(2-1) # i know it's silly atm
+    x_2_list = []
+    x_2 = 0
+    for item in values_chi_calc:
+        for cell in range(len(item[0])):
+            x_2 += math.pow(item[0][cell]-item[1][cell], 2)/item[1][cell]
+        x_2_list.append(x_2)
+        x_2 = 0
+
+    print(dfs, x_2_list)
+
+
 chi_homogenity(percs_S1_test, percs_S2_test, ns_S1_test, ns_S2_test)
+
 
 
 # for reference: list_chi_calc structure
